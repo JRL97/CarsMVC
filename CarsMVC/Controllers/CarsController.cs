@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarsMVC.Data;
 using CarsMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarsMVC.Controllers
 {
+    [Authorize(Roles ="Staff")]
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +24,7 @@ namespace CarsMVC.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Cars.ToListAsync());
+              return View(await _context.Cars.Include(c => c.Images).ToListAsync());
         }
 
         // GET: Cars/Details/5
