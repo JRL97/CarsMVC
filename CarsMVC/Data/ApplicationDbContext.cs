@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using CarsMVC.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarsMVC.Data
@@ -9,5 +10,7 @@ namespace CarsMVC.Data
             : base(options)
         {
         }
+       public DbSet<Car> Cars { get; set; }
+       public DbSet<CarImage> CarImages { get; set; }
     }
 }
