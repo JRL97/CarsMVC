@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CarsMVC.Controllers
 {
-    
+    [Authorize(Roles = "Staff")]
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
