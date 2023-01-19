@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CarsMVC.Controllers
 {
-    
+    [Authorize(Roles ="Staff")]
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,9 +22,9 @@ namespace CarsMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder)
         {
          
-                ViewData["PriceSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["ColourSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            var cars = from s in _context.Cars
+                ViewData["PriceSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+                ViewData["ColourSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+                var cars = from s in _context.Cars
                                select s;
                 switch (sortOrder)
                 {
