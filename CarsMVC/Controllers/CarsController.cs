@@ -22,19 +22,19 @@ namespace CarsMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder)
         {
          
-                ViewData["PriceSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-                ViewData["ColourSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-                var cars = from s in _context.Cars
+                ViewData["PriceSortParm"] =  sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["ColourSortParm"] = String.IsNullOrEmpty(sortOrder) ? "colour_desc" : "";
+            var cars = from s in _context.Cars
                                select s;
                 switch (sortOrder)
                 {
-                    case "name_desc":
+                    case "colour_desc":
                         cars = cars.OrderByDescending(s => s.Colour);
                         break;
-                    case "Date":
+                    case "Price":
                         cars = cars.OrderBy(s => s.Price);
                         break;
-                    case "date_desc":
+                    case "price_desc":
                         cars = cars.OrderByDescending(s => s.Price);
                         break;
                     default:
