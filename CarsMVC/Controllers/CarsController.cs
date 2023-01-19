@@ -8,7 +8,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CarsMVC.Controllers
 {
-    [Authorize(Roles ="Staff")]
+    
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,31 +22,31 @@ namespace CarsMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
          
-                ViewData["PriceSortParm"] =  sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["PriceSortParm"] =  sortOrder == "Price" ? "price_desc" : "Price";
             ViewData["ColourSortParm"] = String.IsNullOrEmpty(sortOrder) ? "colour_desc" : "";
             ViewData["CurrentFilter"] = searchString;
-            var cars = from s in _context.Cars
-                               select s;
+            var cars = from c in _context.Cars
+                               select c;
             if (!String.IsNullOrEmpty(searchString))
             {
-                cars = cars.Where(s => s.Name.Contains(searchString)
-                || s.Colour.Contains(searchString));
+                cars = cars.Where(c => c.Name.Contains(searchString)
+                || c.Colour.Contains(searchString));
             }
 
 
                 switch (sortOrder)
                 {
                     case "colour_desc":
-                        cars = cars.OrderByDescending(s => s.Colour);
+                        cars = cars.OrderByDescending(c => c.Colour);
                         break;
                     case "Price":
-                        cars = cars.OrderBy(s => s.Price);
+                        cars = cars.OrderBy(c => c.Price);
                         break;
                     case "price_desc":
-                        cars = cars.OrderByDescending(s => s.Price);
+                        cars = cars.OrderByDescending(c => c.Price);
                         break;
                     default:
-                        cars = cars.OrderBy(s => s.Colour);
+                        cars = cars.OrderBy(c => c.Colour);
                         break;
                 }
                 return View(await _context.Cars.Include(c => c.Images).ToListAsync());
