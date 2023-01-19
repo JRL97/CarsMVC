@@ -19,13 +19,21 @@ namespace CarsMVC.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
          
                 ViewData["PriceSortParm"] =  sortOrder == "Price" ? "price_desc" : "Price";
             ViewData["ColourSortParm"] = String.IsNullOrEmpty(sortOrder) ? "colour_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
             var cars = from s in _context.Cars
                                select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                cars = cars.Where(s => s.Name.Contains(searchString)
+                || s.Colour.Contains(searchString));
+            }
+
+
                 switch (sortOrder)
                 {
                     case "colour_desc":
