@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using CarsMVC.Data;
 using CarsMVC.Models;
+using Microsoft.Data.SqlClient;
+
 
 namespace CarsMVC.Controllers
 {
-    [Authorize(Roles ="Staff")]
+    
     public class CarsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,9 +19,29 @@ namespace CarsMVC.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-              return View(await _context.Cars.Include(c => c.Images).ToListAsync());
+         
+                ViewData["PriceSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["ColourSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            var cars = from s in _context.Cars
+                               select s;
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        cars = cars.OrderByDescending(s => s.Colour);
+                        break;
+                    case "Date":
+                        cars = cars.OrderBy(s => s.Price);
+                        break;
+                    case "date_desc":
+                        cars = cars.OrderByDescending(s => s.Price);
+                        break;
+                    default:
+                        cars = cars.OrderBy(s => s.Colour);
+                        break;
+                }
+                return View(await _context.Cars.Include(c => c.Images).ToListAsync());
         }
 
         // GET: Cars/Details/5
