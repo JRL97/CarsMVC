@@ -25,8 +25,10 @@ namespace CarsMVC.Controllers
             ViewData["PriceSortParm"] =  sortOrder == "Price" ? "price_desc" : "Price";
             ViewData["ColourSortParm"] = String.IsNullOrEmpty(sortOrder) ? "colour_desc" : "";
             ViewData["CurrentFilter"] = searchString;
+            
             var cars = from c in _context.Cars
                                select c;
+            
             if (!String.IsNullOrEmpty(searchString))
             {
                 cars = cars.Where(c => c.Name.Contains(searchString)
@@ -49,7 +51,7 @@ namespace CarsMVC.Controllers
                         cars = cars.OrderBy(c => c.Colour);
                         break;
                 }
-                return View(await _context.Cars.Include(c => c.Images).ToListAsync());
+                return View(await cars.Include(c => c.Images).ToListAsync());
         }
 
         // GET: Cars/Details/5
