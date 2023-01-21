@@ -19,7 +19,9 @@ namespace CarsMVC.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Cars.Include(c => c.Images).ToListAsync());
+              return View(await _context.Cars
+                  .Include(c => c.Images)
+                  .ToListAsync());
         }
 
         // GET: Cars/Details/5
